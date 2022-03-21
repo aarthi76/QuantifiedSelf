@@ -36,8 +36,9 @@
     │   └── signup.png
     └──css
     │   └── dashboard.css
+    │   └── login.css
 └── templates
-    ├── createacc.html
+    ├── signup.html
     └── index.html
     └── login.html
     └── welcome.html
