@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="/static/css/dashboard.css">
+        <title>Add log | Quantified Self</title>
+    </head>
+    <body>
+        <div class="d-flex" id="wrapper">
+            <!--Sidebar starts-->
+            <div class="bg-white">
+                <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase">
+                    <i class="fas fa-person me-2"></i> Quantified Self
+                </div>
+                <div class="list-group list-group-flush my-3">
+                    <a href="/dashboard" class="list-group-item list-group-item-action bg-transparent second-text active">
+                        <i class="fas fa-tachometer-alt me-2"></i> Dashboard </a>
+                    <a href="/logout" class="list-group-item list-group-item-action bg-transparent second-text fw-bold active">
+                        <i class="fas fa-power-off me-2"></i> Logout </a>
+                </div>
+            </div>
+            <!--Sidebar ends-->
+            <!-- Page Content -->
+            <div id="page-content-wrapper">
+                <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-person-dots-from-line primary-text fs-4 me-3" id="menu-toggle"></i>
+                        <h1 class="fs-2 m-0">Hello {{ current_user.username }}!</h1>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle second-text fw-bold" href="#" id="navbarDropdown"
+                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user me-2"></i> {{ current_user.username }}
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <br>
+                <div class="text-center">
+                    <h1>Add a log</h1><br><br>
+                </div>
+                <div class="container add_log">
+                    <div class="mb-3 row d-flex justify-content-center">
+                      <h3 align="center">Log for tracker: ({{t.tracker_id}}) {{t.name}}</h3>
+                      <br><br>
+                      <form id="log_form" action="add" method="post">
+                        <div class="mb-3 row">
+                          <h6 class="col-8 offset-2 text-muted text-center">Tracker Description:{{t.desc}}</h6>
+                          <label class="col-3 offset-3" for="time">Timestamp:</label>
+                          <input class="col-3" type="text" name="time" value="{{ datetime.now().strftime('%d/%b/%Y, %H:%M:%S.%f') }}">
+                        </div>
+                        <div class="mb-3 row">
+                          <label class="col-3 offset-3" for="type">Tracker type:</label>
+                          <input class="col-3" type="text" name="type" value="{{t.type}}" disabled><br>
+                        </div>
+                        <div class="mb-3 row">
+                          {% if t.type=="Multiple-choice" -%}
+                          <label class="col-3 offset-3" for="value">Select tracker type:</label>
+                          <select class="col-3" name="value">
+                            {% for i in t.settings.split(',') -%}
+                            <option value={{i}}>{{i}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </form>
+                      {% elif t.type=='Integer' %}
+                      <label class="col-3 offset-3" for="value">Enter value of log as integer:</label>
+                      <input class="col-3" type="number" name="value" placeholder="Int" required>
+                    </div>
+                    </form>
+                    {% elif t.type=='Numeric' %}
+                    <label class="col-3 offset-3" for="value">Enter value of log as float:</label>
+                    <input class="col-3" type="number" name="value" step='0.001' placeholder="float" required>
+                  </div>
+                  </form>
+                  {% elif t.type=='Time' -%}
+                  <label class="col-3 offset-3" for="value">Time Duration:</label>
+                  <input class="col-3" type="text" name="value" value="{{timedict.duration}}" placeholder="Time duration(H:MM:SS)" required></div>
+                  </form>
+                  <form id="time" action="add" method="get">
+                    <div class="mb-3 row">
+                      <label class="col-3 offset-3" for="start">Record Start and End time:</label><br>
+                    </div>
+                    <div class="row">
+                      <input class="col-3 offset-3" type="time" name="start" value="{{timedict.start}}" step='any'>
+                      <button class="col-3" form="time" type="submit" name="startb" value="start">Start tracking time</button>
+                    </div><br>
+                    <div class="row">
+                      <input class="col-3 offset-3" type="time" name="end" value="{{timedict.end}}" step='any'>
+                      <button class="col-3" form="time" type="submit" name="endb" value="end">End tracking time</button>
+                    </div>
+                </form>
+                {% endif %}
+                </div>
+                <div class="row">
+                    <label for="note" class="col-3 offset-3">Enter note for log:</label>
+                    <textarea form='log_form' class="col-6 offset-3" name="note" placeholder="Note/Remark" align="center"></textarea>
+                </div><br>
+                <div class="text-center">
+                    <button form="log_form" type="submit" name="submit">
+                        <h5>Add log</h5>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
