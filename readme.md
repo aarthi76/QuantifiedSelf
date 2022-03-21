@@ -14,18 +14,15 @@
 │   ├── __init__.py
 │   ├── models.py
 │   └── __pycache__
-│       ├── config.cpython-36.pyc
-│       ├── config.cpython-37.pyc
-│       ├── controllers.cpython-36.pyc
-│       ├── controllers.cpython-37.pyc
-│       ├── database.cpython-36.pyc
-│       ├── database.cpython-37.pyc
-│       ├── __init__.cpython-36.pyc
-│       ├── __init__.cpython-37.pyc
-│       ├── models.cpython-36.pyc
-│       └── models.cpython-37.pyc
+│       ├── config.cpython-39.pyc
+│       ├── controllers.cpython-39.pyc
+│       ├── database.cpython-39.pyc
+│       ├── __init__.cpython-39.pyc
+│       ├── models.cpython-39.pyc
+├── __pycache__
+|   ├──app.cpython-39.pyc 
 ├── db_directory
-│   └── quantifiedself.db
+│   └── database.sqlite3
 ├── app.py
 ├── readme.md
 ├── static
